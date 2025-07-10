@@ -1,14 +1,22 @@
 import { FilmModel, FilmRowCard } from "entities/film"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { CardGrid, Group, Panel, PanelHeader, Spinner } from "@vkontakte/vkui"
 import { observer } from "mobx-react-lite"
+import { FilmFilter } from "features/film-filter"
 export const FilmsListPage = observer(() => {
   const {
-    store: { filmListError, getFilms, isLoading, filmList },
+    store: { filmListError, getFilms, isLoading, filmList, getGenres, genres },
   } = FilmModel
-
+  const [filteredFilmList, setFilteredFilmList] = useState(filmList)
   useEffect(() => {
-    getFilms()
+    getFilms({
+      "rating.imdb": "5",
+      types: [],
+      year: "2020-2025",
+      limit: 50,
+      page: 1,
+    })
+    getGenres()
   }, [])
 
   if (filmListError) return
@@ -17,24 +25,24 @@ export const FilmsListPage = observer(() => {
   ) : (
     <Panel>
       <PanelHeader>Фильмы</PanelHeader>
-      <Group>
-        <CardGrid padding={true}>
-          {filmList.items.map(
-            ({
-              kinopoiskId,
-              genres,
-              nameOriginal,
-              posterUrl,
-              year,
-              ratingImdb,
-            }) => (
+      <FilmFilter
+        genres={genres || []}
+        onFilter={(options) => {
+          console.log("options", options)
+          setFilteredFilmList(filmList)
+        }}
+      />
+      <Group style={{ display: "flex", justifyContent: "center" }}>
+        <CardGrid padding={true} style={{ width: "80%" }}>
+          {filteredFilmList.docs?.map(
+            ({ id, genres, alternativeName, year, rating, poster }) => (
               <FilmRowCard
-                key={kinopoiskId}
-                rate={ratingImdb}
-                title={nameOriginal}
+                key={id}
+                rating={rating}
+                title={alternativeName}
                 year={year}
                 genres={genres}
-                posterUrl={posterUrl}
+                poster={poster}
               />
             )
           )}
