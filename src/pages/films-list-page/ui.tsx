@@ -1,13 +1,14 @@
 import { FilmModel, FilmRowCard } from "entities/film"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { CardGrid, Group, Panel, PanelHeader, Spinner } from "@vkontakte/vkui"
 import { observer } from "mobx-react-lite"
 import { FilmFilter } from "features/film-filter"
+
 export const FilmsListPage = observer(() => {
   const {
     store: { filmListError, getFilms, isLoading, filmList, getGenres, genres },
   } = FilmModel
-  const [filteredFilmList, setFilteredFilmList] = useState(filmList)
+
   useEffect(() => {
     getFilms({
       "rating.imdb": "5",
@@ -27,14 +28,13 @@ export const FilmsListPage = observer(() => {
       <PanelHeader>Фильмы</PanelHeader>
       <FilmFilter
         genres={genres || []}
-        onFilter={(options) => {
+        getOptions={(options) => {
           console.log("options", options)
-          setFilteredFilmList(filmList)
         }}
       />
       <Group style={{ display: "flex", justifyContent: "center" }}>
         <CardGrid padding={true} style={{ width: "80%" }}>
-          {filteredFilmList.docs?.map(
+          {filmList.docs?.map(
             ({ id, genres, alternativeName, year, rating, poster }) => (
               <FilmRowCard
                 key={id}

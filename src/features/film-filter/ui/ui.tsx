@@ -10,19 +10,21 @@ import {
 } from "@vkontakte/vkui"
 import {
   useFilteredOptions,
+  useSearchFilteredParams,
   type FilterOptions,
 } from "features/film-filter/hooks"
 import { useEffect } from "react"
-
+import { useLocation } from "react-router"
+import { toJS } from "mobx"
 import type { Genre } from "shared/api/films/model"
 import deleteSVG from "shared/assets/delete.png"
 
 type Props = {
   genres: Genre[]
-  onFilter: (options: FilterOptions) => void
+  getOptions: (options: FilterOptions) => void
 }
 
-export const FilmFilter = ({ genres, onFilter }: Props) => {
+export const FilmFilter = ({ genres, getOptions }: Props) => {
   const {
     genresList,
     onFilterInside,
@@ -36,7 +38,8 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
     yearFrom,
     yearTo,
   } = useFilteredOptions()
-
+  const location = useLocation()
+  const { searchParams, setSearchFilteredParams } = useSearchFilteredParams()
   const onUpdate = () => {
     const filterOptions = {
       years: { yearFrom, yearTo },
@@ -45,11 +48,31 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
     }
 
     const options = onFilterInside(filterOptions)
-    onFilter(options)
+    setSearchFilteredParams(options)
+    getOptions(options)
   }
+
   useEffect(() => {
     onUpdate()
   }, [genresList])
+
+  useEffect(() => {
+    const g = searchParams.getAll("type")
+    const rating = searchParams.get("rating") || "0-10"
+    const year = searchParams.get("year") || "1990-2025"
+    const fGrs = toJS(genres).filter((genr) => g.includes(genr.slug))
+
+    const [ratingFrom, ratingTo] = rating.split("-").map(Number)
+    const [yearFrom, yearTo] = year.split("-").map(Number)
+    const options = {
+      genres: fGrs,
+      ratings: { ratingFrom, ratingTo },
+      years: { yearFrom, yearTo },
+    }
+
+    const filteredOptions = onFilterInside(options)
+    setSearchFilteredParams(filteredOptions)
+  }, [location.search])
   return (
     <Group>
       <Header>Фильтры</Header>
@@ -153,7 +176,7 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
                   if (val >= 1 && val <= new Date().getFullYear())
-                    setYearFrom(val)
+                    setYearFrom(Number(val.toFixed(0)))
                 }}
               />
               <Input
@@ -164,7 +187,7 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
                 value={yearTo}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setYearTo(val)
+                  setYearTo(Number(val.toFixed(0)))
                 }}
               />
             </FormItem>
@@ -180,7 +203,7 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
                 value={ratingFrom}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setRatingFrom(val)
+                  setRatingFrom(Number(val.toFixed(1)))
                 }}
               />
               <Input
@@ -191,7 +214,7 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
                 value={ratingTo}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setRatingTo(val)
+                  setRatingTo(Number(val.toFixed(1)))
                 }}
               />
             </FormItem>
