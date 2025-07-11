@@ -25,25 +25,16 @@ type Props = {
 }
 
 export const FilmFilter = ({ genres, getOptions }: Props) => {
-  const {
-    genresList,
-    onFilterInside,
-    ratingFrom,
-    ratingTo,
-    setYearFrom,
-    setYearTo,
-    setGenresList,
-    setRatingFrom,
-    setRatingTo,
-    yearFrom,
-    yearTo,
-  } = useFilteredOptions()
+  const { genresList, onFilterInside, ratingFrom, ratingTo, yearFrom, yearTo } =
+    useFilteredOptions()
   const location = useLocation()
   const { searchParams, setSearchFilteredParams } = useSearchFilteredParams()
   const onUpdate = () => {
     const filterOptions = {
-      years: { yearFrom, yearTo },
-      ratings: { ratingFrom, ratingTo },
+      yearFrom,
+      yearTo,
+      ratingFrom,
+      ratingTo,
       genres: genresList,
     }
 
@@ -52,9 +43,9 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
     getOptions(options)
   }
 
-  useEffect(() => {
-    onUpdate()
-  }, [genresList])
+  // useEffect(() => {
+  //   onUpdate()
+  // }, [genresList])
 
   useEffect(() => {
     const g = searchParams.getAll("type")
@@ -66,8 +57,10 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
     const [yearFrom, yearTo] = year.split("-").map(Number)
     const options = {
       genres: fGrs,
-      ratings: { ratingFrom, ratingTo },
-      years: { yearFrom, yearTo },
+      ratingFrom,
+      ratingTo,
+      yearFrom,
+      yearTo,
     }
 
     const filteredOptions = onFilterInside(options)
@@ -81,7 +74,6 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
           display: "flex",
           justifyContent: "center",
         }}
-        onBlur={onUpdate}
       >
         <Div style={{ width: "80%" }}>
           <Div
@@ -109,19 +101,24 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                 defaultValue={"any"}
                 options={genres?.map((g) => ({ label: g.name, value: g.slug }))}
                 onChange={(_, newVal) => {
-                  setGenresList((prev) => {
-                    const g = genres.find((g) => g.slug === newVal)
-                    if (g) {
-                      if (g.slug === "any") return []
-                      return [
-                        ...prev,
-                        {
-                          slug: g?.slug,
-                          name: g?.name,
-                        },
-                      ]
-                    }
-                    return prev
+                  onFilterInside({
+                    genres: (prev) => {
+                      const ExistedG = prev.find((g) => g.slug === newVal)
+                      if (!ExistedG) {
+                        const g = genres.find((g) => g.slug === newVal)
+                        if (g) {
+                          if (g.slug === "any") return []
+                          return [
+                            ...prev,
+                            {
+                              slug: g?.slug,
+                              name: g?.name,
+                            },
+                          ]
+                        }
+                      }
+                      return prev
+                    },
                   })
                 }}
               />
@@ -142,9 +139,10 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                           src={deleteSVG}
                           style={{ width: "20px" }}
                           onClick={() => {
-                            setGenresList((prev) =>
-                              prev.filter((genr) => genr.slug !== g.slug)
-                            )
+                            onFilterInside({
+                              genres: (prev: Genre[]) =>
+                                prev.filter((genr) => genr.slug !== g.slug),
+                            })
                           }}
                         />
                       }
@@ -165,6 +163,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
             </FormItem>
 
             <FormItem
+              onBlur={onUpdate}
               style={{ display: "flex", flexDirection: "column", gap: "5px" }}
             >
               <Input
@@ -176,7 +175,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
                   if (val >= 1 && val <= new Date().getFullYear())
-                    setYearFrom(Number(val.toFixed(0)))
+                    onFilterInside({ yearFrom: Number(val.toFixed(0)) })
                 }}
               />
               <Input
@@ -187,12 +186,13 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                 value={yearTo}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setYearTo(Number(val.toFixed(0)))
+                  onFilterInside({ yearTo: Number(val.toFixed(0)) })
                 }}
               />
             </FormItem>
 
             <FormItem
+              onBlur={onUpdate}
               style={{ display: "flex", flexDirection: "column", gap: "5px" }}
             >
               <Input
@@ -203,7 +203,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                 value={ratingFrom}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setRatingFrom(Number(val.toFixed(1)))
+                  onFilterInside({ ratingFrom: Number(val.toFixed(1)) })
                 }}
               />
               <Input
@@ -214,7 +214,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
                 value={ratingTo}
                 onChange={(e) => {
                   const val = Number(e.currentTarget.value)
-                  setRatingTo(Number(val.toFixed(1)))
+                  onFilterInside({ ratingTo: Number(val.toFixed(1)) })
                 }}
               />
             </FormItem>
