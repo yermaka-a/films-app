@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useSearchParams } from "react-router"
 import type { Genre } from "shared/api/films/model"
 
 export type FilterOptions = {
@@ -63,4 +64,47 @@ export const useFilteredOptions = () => {
     setGenresList,
     onFilterInside,
   }
+}
+
+export const useSearchFilteredParams = () => {
+  const [params, setSearchParams] = useSearchParams()
+  const [opts, setOptions] = useState<FilterOptions>()
+
+  const setOpts = (options: FilterOptions) => {
+    setOptions(options)
+    setSearchParams({
+      type: options.genres.map((g) => g.slug),
+      rating: `${options.ratings.ratingFrom}-${options.ratings.ratingTo}`,
+      year: `${options.years.yearFrom}-${options.years.yearTo}`,
+    })
+  }
+
+  const setSearchFilteredParams = (options: FilterOptions) => {
+    const {
+      genres,
+      ratings: { ratingFrom, ratingTo },
+      years: { yearFrom, yearTo },
+    } = options
+
+    if (opts) {
+      const {
+        genres: g,
+        ratings: { ratingFrom: rFr, ratingTo: rTo },
+        years: { yearFrom: yFr, yearTo: yTo },
+      } = opts
+
+      if (
+        !genres.every((genr, i) => genr.slug === g[i]?.slug) ||
+        !(ratingFrom === rFr && ratingTo === rTo) ||
+        !(yearFrom === yFr && yearTo === yTo)
+      ) {
+        {
+          setOpts(options)
+        }
+      }
+    } else {
+      setOpts(options)
+    }
+  }
+  return { params, opts, setSearchFilteredParams } as const
 }
