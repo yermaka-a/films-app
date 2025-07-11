@@ -1,11 +1,14 @@
 import { RouterProvider } from "react-router"
 import { ROUTER } from "app/router"
+import { AdaptivityProvider, ConfigProvider } from "@vkontakte/vkui"
 
 function App() {
   return (
-    <>
-      <RouterProvider router={ROUTER} />
-    </>
+    <ConfigProvider>
+      <AdaptivityProvider>
+        <RouterProvider router={ROUTER} />
+      </AdaptivityProvider>
+    </ConfigProvider>
   )
 }
 
