@@ -12,6 +12,7 @@ import {
   useFilteredOptions,
   type FilterOptions,
 } from "features/film-filter/hooks"
+import { useEffect } from "react"
 
 import type { Genre } from "shared/api/films/model"
 import deleteSVG from "shared/assets/delete.png"
@@ -35,6 +36,20 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
     yearFrom,
     yearTo,
   } = useFilteredOptions()
+
+  const onUpdate = () => {
+    const filterOptions = {
+      years: { yearFrom, yearTo },
+      ratings: { ratingFrom, ratingTo },
+      genres: genresList,
+    }
+
+    const options = onFilterInside(filterOptions)
+    onFilter(options)
+  }
+  useEffect(() => {
+    onUpdate()
+  }, [genresList])
   return (
     <Group>
       <Header>Фильтры</Header>
@@ -43,15 +58,7 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
           display: "flex",
           justifyContent: "center",
         }}
-        onBlur={() => {
-          const filterOptions = {
-            years: { yearFrom, yearTo },
-            ratings: { ratingFrom, ratingTo },
-            genres: genresList,
-          }
-          const options = onFilterInside(filterOptions)
-          onFilter(options)
-        }}
+        onBlur={onUpdate}
       >
         <Div style={{ width: "80%" }}>
           <Div
@@ -78,22 +85,18 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
               <Select
                 defaultValue={"any"}
                 options={genres?.map((g) => ({ label: g.name, value: g.slug }))}
-                onChange={(e) => {
+                onChange={(_, newVal) => {
                   setGenresList((prev) => {
-                    const g = genres.find((g) => g.slug === e.target.value)
+                    const g = genres.find((g) => g.slug === newVal)
                     if (g) {
                       if (g.slug === "any") return []
-                      const isExists = prev.find((genr) => genr.slug === g.slug)
-                      console.log("search", g, isExists)
-                      if (!isExists) {
-                        return [
-                          ...prev,
-                          {
-                            slug: g?.slug,
-                            name: g?.name,
-                          },
-                        ]
-                      }
+                      return [
+                        ...prev,
+                        {
+                          slug: g?.slug,
+                          name: g?.name,
+                        },
+                      ]
                     }
                     return prev
                   })
@@ -115,11 +118,11 @@ export const FilmFilter = ({ genres, onFilter }: Props) => {
                         <img
                           src={deleteSVG}
                           style={{ width: "20px" }}
-                          onClick={() =>
+                          onClick={() => {
                             setGenresList((prev) =>
                               prev.filter((genr) => genr.slug !== g.slug)
                             )
-                          }
+                          }}
                         />
                       }
                       centered
