@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { CardGrid, Group, Panel, PanelHeader, Spinner } from "@vkontakte/vkui"
 import { observer } from "mobx-react-lite"
 import { FilmFilter } from "features/film-filter"
+import { ModalError } from "shared/ui/modal-error"
 
 export const FilmsListPage = observer(() => {
   const {
@@ -20,7 +21,7 @@ export const FilmsListPage = observer(() => {
     getGenres()
   }, [])
 
-  if (filmListError) return
+  if (filmListError) return <ModalError errorDescription={filmListError} />
   return isLoading ? (
     <Spinner />
   ) : (
@@ -38,6 +39,7 @@ export const FilmsListPage = observer(() => {
             ({ id, genres, alternativeName, year, rating, poster }) => (
               <FilmRowCard
                 key={id}
+                id={id}
                 rating={rating}
                 title={alternativeName}
                 year={year}
