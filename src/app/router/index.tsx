@@ -2,10 +2,11 @@ import { DescriptionFilmPage } from "pages"
 import { FilmsListPage } from "pages"
 import { createBrowserRouter } from "react-router"
 import { DefaultLayout } from "shared"
+import { ROUTES } from "shared/routes"
 
-export const ROUTER = createBrowserRouter([
+export const router = createBrowserRouter([
   {
-    path: "/",
+    path: ROUTES.HOME,
     element: <DefaultLayout />,
     children: [
       {
@@ -13,7 +14,7 @@ export const ROUTER = createBrowserRouter([
         element: <FilmsListPage />,
       },
       {
-        path: "film-description/:id",
+        path: ROUTES.FILM,
         element: <DescriptionFilmPage />,
       },
     ],
