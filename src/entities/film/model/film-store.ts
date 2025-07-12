@@ -1,13 +1,18 @@
 import { makeAutoObservable, runInAction } from "mobx"
-import { getFilms, getGenres } from "shared/api/films"
-import type { Film, Films, Genre, QueryParams } from "shared/api/films/model"
+import { getFilmDescriptionById, getFilms, getGenres } from "shared/api/films"
+import type {
+  FilmDescription,
+  Films,
+  Genre,
+  QueryParams,
+} from "shared/api/films/model"
 
 class FilmStore {
   filmList: Films = { docs: [], total: 0, limit: 0, page: 0, pages: 0 }
-  film?: Film
+  filmDescription?: FilmDescription
   isLoading = false
   filmListError = ""
-  filmError = ""
+  filmDescriptionError = ""
   genresError = ""
   genres?: Genre[] = []
   constructor() {
@@ -49,6 +54,26 @@ class FilmStore {
           this.isLoading = false
           this.genresError = error.message
         })
+      }
+    }
+  }
+  getFilmDescriptionById = async ({ id }: QueryParams) => {
+    if (id) {
+      try {
+        this.isLoading = true
+        const data = await getFilmDescriptionById(id)
+        runInAction(() => {
+          this.isLoading = false
+
+          this.filmDescription = data.data
+        })
+      } catch (error) {
+        if (error instanceof Error) {
+          runInAction(() => {
+            this.isLoading = false
+            this.filmDescriptionError = error.message
+          })
+        }
       }
     }
   }
