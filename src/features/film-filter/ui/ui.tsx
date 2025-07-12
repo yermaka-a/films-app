@@ -1,4 +1,5 @@
 import {
+  Button,
   CellButton,
   Div,
   FormItem,
@@ -25,6 +26,7 @@ type Props = {
 }
 
 export const FilmFilter = ({ genres, getOptions }: Props) => {
+  const location = useLocation()
   const {
     genresList,
     onFilterInside,
@@ -38,7 +40,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
     yearFrom,
     yearTo,
   } = useFilteredOptions()
-  const location = useLocation()
+
   const { searchParams, setSearchFilteredParams } = useSearchFilteredParams()
   const onUpdate = () => {
     const filterOptions = {
@@ -49,12 +51,7 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
 
     const options = onFilterInside(filterOptions)
     setSearchFilteredParams(options)
-    getOptions(options)
   }
-
-  useEffect(() => {
-    onUpdate()
-  }, [genresList])
 
   useEffect(() => {
     const g = searchParams.getAll("type")
@@ -69,20 +66,30 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
       ratings: { ratingFrom, ratingTo },
       years: { yearFrom, yearTo },
     }
-
     const filteredOptions = onFilterInside(options)
-    setSearchFilteredParams(filteredOptions)
+    getOptions(filteredOptions)
   }, [location.search])
   return (
     <Group>
       <Header>Фильтры</Header>
+
       <FormLayoutGroup
         style={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
         }}
-        onBlur={onUpdate}
       >
+        <Button
+          onClick={onUpdate}
+          style={{
+            padding: "0.2rem",
+            height: "fit-content",
+            alignSelf: "flex-start",
+          }}
+        >
+          Применить
+        </Button>
         <Div style={{ width: "80%" }}>
           <Div
             style={{
