@@ -1,14 +1,26 @@
 import { Caption, Card, Div, Title, Text, Image } from "@vkontakte/vkui"
+import { href, Link } from "react-router"
+
 import { type Genre, type Posters, type Rating } from "shared/api/films/model"
+import { ROUTES } from "shared/routes"
+
 type Props = {
   title: string
+  id: number
   year: number
   rating: Rating
   poster: Posters
   genres: Genre[]
 }
 
-export const FilmRowCard = ({ title, year, rating, genres, poster }: Props) => {
+export const FilmRowCard = ({
+  title,
+  year,
+  rating,
+  id,
+  genres,
+  poster,
+}: Props) => {
   return (
     <Card
       mode="shadow"
@@ -18,11 +30,16 @@ export const FilmRowCard = ({ title, year, rating, genres, poster }: Props) => {
         height: 550,
       }}
     >
-      <Image
-        src={poster?.url || poster?.previewUrl}
-        alt={title}
-        style={{ width: "100%", height: 420, objectFit: "cover" }}
-      />
+      <Link
+        style={{ height: "max-content", cursor: "pointer" }}
+        to={href(ROUTES.FILM, { id: id.toFixed(0) })}
+      >
+        <Image
+          src={poster?.url || poster?.previewUrl}
+          alt={title}
+          style={{ width: "100%", height: 420, objectFit: "cover" }}
+        />
+      </Link>
       <Div style={{ padding: "12px 16px" }}>
         <Title level="3" weight="2" style={{ marginBottom: 4 }}>
           {title} ({year})
