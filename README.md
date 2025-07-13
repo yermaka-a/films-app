@@ -6,3 +6,4 @@
     - `yarn install`
 3. edit .env.default file or use my parameters and then write this in your cmd to start the project in dev mode:
     - `yarn dev --mode default`
+#### It uses [Kinopoisk API](https://kinopoiskdev.readme.io)
