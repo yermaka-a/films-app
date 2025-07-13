@@ -38,15 +38,46 @@ class FilmStore {
     )
   }
 
+
   getFilms = async (queryParams: QueryParams) => {
     try {
       this.isLoading = true
       const data = await getFilteredFilms(queryParams)
       runInAction(() => {
-        this.filmList.docs.concat(data.data.docs)
-        this.filmList.page = data.data.page
-        this.filmList.pages = data.data.pages
-        this.filmList.total = data.data.total
+    
+        this.filmList = data.data
+        this.isLoading = false
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        runInAction(() => {
+          this.isLoading = false
+          this.filmListError = error.message
+        })
+      }
+    }
+  }
+
+  updateFilms = async (queryParams: QueryParams) => {
+    try {
+      this.isLoading = true
+      const data = await getFilteredFilms(queryParams)
+      runInAction(() => {
+        const tempfilmList: Films = {
+          docs: [],
+          limit: 50,
+          page: 0,
+          pages: 0,
+          total: 0,
+        }
+        tempfilmList.docs = this.filmList.docs
+        tempfilmList.docs = tempfilmList.docs.concat(data.data.docs)
+
+        tempfilmList.page = data.data.page
+        tempfilmList.pages = data.data.pages
+        tempfilmList.total = data.data.total
+
+        this.filmList = tempfilmList
         this.isLoading = false
       })
     } catch (error) {
