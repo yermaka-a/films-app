@@ -42,7 +42,7 @@ export type Film = {
   year: 2001
   description: null
   shortDescription: null
-  status: "completed"
+  status: string
   rating: Rating
   votes: Votes
   movieLength: null
