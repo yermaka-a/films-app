@@ -1,4 +1,5 @@
-import { makeAutoObservable, runInAction } from "mobx"
+import { type Film } from "shared/api/films/model"
+import { makeAutoObservable, reaction, runInAction } from "mobx"
 import { getFilmDescriptionById, getFilms, getGenres } from "shared/api/films"
 import type {
   FilmDescription,
@@ -15,8 +16,22 @@ class FilmStore {
   filmDescriptionError = ""
   genresError = ""
   genres?: Genre[] = []
+  favouriteFilmList: Film[] = []
+  filmAddingError = ""
   constructor() {
     makeAutoObservable(this)
+
+    const favourite = localStorage.getItem("favourite")
+    if (favourite) {
+      this.favouriteFilmList = JSON.parse(favourite)
+    }
+
+    reaction(
+      () => this.favouriteFilmList.slice(),
+      (favouriteFilmList) => {
+        localStorage.setItem("favourite", JSON.stringify(favouriteFilmList))
+      }
+    )
   }
 
   getFilms = async (queryParams: QueryParams) => {
@@ -75,6 +90,28 @@ class FilmStore {
           })
         }
       }
+    }
+  }
+
+  addFilmToFavourite = (film: Film) => {
+    const filmIds = this.favouriteFilmList.map((f) => f.id)
+
+    if (!filmIds.some((i) => i === film.id)) {
+      try {
+        runInAction(() => {
+          this.favouriteFilmList.push(film)
+          return true
+        })
+      } catch (error) {
+        if (error instanceof Error) {
+          runInAction(() => {
+            this.isLoading = false
+            this.filmAddingError = error.message
+          })
+        }
+      }
+    } else {
+      return false
     }
   }
 }
