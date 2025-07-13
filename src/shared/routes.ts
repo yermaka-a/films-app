@@ -1,6 +1,8 @@
 export const ROUTES = {
-  HOME: "/",
+  ROOT: "/",
+  HOME: "/home",
   FILM: "film-description/:id",
+  FAVOURITE: "favourite",
 } as const
 
 export type PathParams = {
