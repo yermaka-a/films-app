@@ -88,6 +88,7 @@ export const FilmCard = ({
             <Div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {genres?.map((g) => (
                 <Caption
+                  key={g.name}
                   style={{
                     backgroundColor: "#e1e3e6",
                     padding: "4px 8px",

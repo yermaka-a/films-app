@@ -5,6 +5,7 @@ import { type Genre, type Posters, type Rating } from "shared/api/films/model"
 import { ROUTES } from "shared/routes"
 
 type Props = {
+  AddFilm?: React.ReactNode
   title: string
   id: number
   year: number
@@ -14,6 +15,7 @@ type Props = {
 }
 
 export const FilmRowCard = ({
+  AddFilm,
   title,
   year,
   rating,
@@ -27,7 +29,6 @@ export const FilmRowCard = ({
       style={{
         borderRadius: 12,
         overflow: "hidden",
-        height: 550,
       }}
     >
       <Link
@@ -37,10 +38,20 @@ export const FilmRowCard = ({
         <Image
           src={poster?.url || poster?.previewUrl}
           alt={title}
-          style={{ width: "100%", height: 420, objectFit: "cover" }}
+          style={{
+            width: "100%",
+            height: 420,
+            objectFit: "cover",
+            position: "relative",
+          }}
         />
       </Link>
-      <Div style={{ padding: "12px 16px" }}>
+      <Div
+        style={{
+          padding: "12px 16px",
+        }}
+      >
+        {AddFilm ? AddFilm : null}
         <Title level="3" weight="2" style={{ marginBottom: 4 }}>
           {title} ({year})
         </Title>
