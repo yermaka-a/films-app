@@ -4,9 +4,11 @@ import { useSearchParams } from "react-router-dom"
 import type { Genre } from "shared/api/films/model"
 
 export type FilterOptions = {
-  years: { yearFrom: number; yearTo: number }
-  ratings: { ratingFrom: number; ratingTo: number }
-  genres: Genre[]
+  yearFrom: number
+  yearTo: number
+  ratingFrom: number
+  ratingTo: number
+  genres: Genre[] | ((prev: Genre[]) => Genre[])
 }
 
 export const useFilteredOptions = () => {
@@ -16,61 +18,47 @@ export const useFilteredOptions = () => {
   const [ratingTo, setRatingTo] = useState<number>(10)
   const [genresList, setGenresList] = useState<Genre[]>([])
 
-  const onFilterInside = (options: FilterOptions) => {
+  const onFilterInside = (options: Partial<FilterOptions>) => {
     const currentYear = new Date().getFullYear()
-
-    const newYearFrom =
-      options.years.yearFrom >= 1990 && options.years.yearFrom <= currentYear
-        ? options.years.yearFrom
-        : 1990
-
-    const newYearTo =
-      options.years.yearTo >= newYearFrom && options.years.yearTo <= currentYear
-        ? options.years.yearTo
-        : currentYear
-
-    const newRatingFrom =
-      options.ratings.ratingFrom >= 0 &&
-      options.ratings.ratingFrom <= options.ratings.ratingTo
-        ? options.ratings.ratingFrom
-        : 0
-
-    const newRatingTo =
-      options.ratings.ratingTo >= newRatingFrom &&
-      options.ratings.ratingTo <= 10
-        ? options.ratings.ratingTo
-        : 10
-
-    const newGenres = options.genres
-
-    const isSameGenres =
-      genresList.length === newGenres.length &&
-      genresList.every((g) => newGenres.includes(g))
-
-    if (
-      isSameGenres &&
-      newYearFrom === yearFrom &&
-      newYearTo === yearTo &&
-      newRatingFrom === ratingFrom &&
-      newRatingTo === ratingTo
-    ) {
-      return {
-        genres: newGenres,
-        ratings: { ratingFrom: newRatingFrom, ratingTo: newRatingTo },
-        years: { yearFrom: newYearFrom, yearTo: newYearTo },
-      }
+    if (options.yearFrom) {
+      const newYearFrom =
+        options.yearFrom >= 1990 && options.yearFrom <= currentYear
+          ? options.yearFrom
+          : 1990
+      setYearFrom(newYearFrom)
+    }
+    if (options.yearTo) {
+      const newYearTo =
+        options.yearTo >= yearFrom && options.yearTo <= currentYear
+          ? options.yearTo
+          : currentYear
+      setYearTo(newYearTo)
+    }
+    if (options.ratingFrom) {
+      const newRatingFrom =
+        options.ratingFrom >= 0 && options.ratingFrom <= ratingTo
+          ? options.ratingFrom
+          : 0
+      setRatingFrom(newRatingFrom)
+    }
+    if (options.ratingTo) {
+      const newRatingTo =
+        options.ratingTo >= ratingFrom && options.ratingTo <= 10
+          ? options.ratingTo
+          : 10
+      setRatingTo(newRatingTo)
     }
 
-    setYearFrom(newYearFrom)
-    setYearTo(newYearTo)
-    setRatingFrom(newRatingFrom)
-    setRatingTo(newRatingTo)
-    setGenresList(newGenres)
+    if (options.genres) {
+      setGenresList(options.genres)
+    }
 
     return {
-      genres: newGenres,
-      ratings: { ratingFrom: newRatingFrom, ratingTo: newRatingTo },
-      years: { yearFrom: newYearFrom, yearTo: newYearTo },
+      genres: genresList,
+      ratingFrom,
+      ratingTo,
+      yearFrom,
+      yearTo,
     }
   }
 
@@ -94,27 +82,29 @@ export const useSearchFilteredParams = () => {
 
   const [opts, setOptions] = useState<FilterOptions | undefined>()
 
-  const setOpts = (options: FilterOptions) => {
+  const setOpts = (
+    options: Omit<FilterOptions, "genres"> & { genres: Genre[] }
+  ) => {
     setOptions(options)
     setSearchParams({
       type: options.genres.map((g) => g.slug),
-      rating: `${options.ratings.ratingFrom}-${options.ratings.ratingTo}`,
-      year: `${options.years.yearFrom}-${options.years.yearTo}`,
+      rating: `${options.ratingFrom}-${options.ratingTo}`,
+      year: `${options.yearFrom}-${options.yearTo}`,
     })
   }
 
-  const setSearchFilteredParams = (options: FilterOptions) => {
-    const {
-      genres,
-      ratings: { ratingFrom, ratingTo },
-      years: { yearFrom, yearTo },
-    } = options
+  const setSearchFilteredParams = (
+    options: Omit<FilterOptions, "genres"> & { genres: Genre[] }
+  ) => {
+    const { genres, ratingFrom, ratingTo, yearFrom, yearTo } = options
 
     if (opts) {
       const {
         genres: g,
-        ratings: { ratingFrom: rFr, ratingTo: rTo },
-        years: { yearFrom: yFr, yearTo: yTo },
+        ratingFrom: rFr,
+        ratingTo: rTo,
+        yearFrom: yFr,
+        yearTo: yTo,
       } = opts
 
       if (
