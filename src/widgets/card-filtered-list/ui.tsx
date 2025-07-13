@@ -79,13 +79,6 @@ export const CardFilteredList = observer(() => {
       />
       <Group style={{ display: "flex", justifyContent: "center" }}>
         <CardGrid
-          onScroll={(e) => {
-            console.log(
-              e.currentTarget.clientHeight,
-              window.innerHeight,
-              window.outerHeight
-            )
-          }}
           padding={true}
           style={{ width: "80%", alignItems: "stretch" }}
         >
