@@ -33,7 +33,12 @@ export const FilmRowCard = ({
     >
       <Link
         style={{ height: "max-content", cursor: "pointer" }}
-        to={href(ROUTES.FILM, { id: id.toFixed(0) })}
+        to={{
+          pathname:
+            ROUTES.HOME +
+            ROUTES.ROOT +
+            href(ROUTES.FILM, { id: id.toFixed(0) }),
+        }}
       >
         <Image
           src={poster?.url || poster?.previewUrl}
