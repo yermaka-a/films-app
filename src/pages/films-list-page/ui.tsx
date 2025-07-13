@@ -1,9 +1,19 @@
 import { FilmModel, FilmRowCard } from "entities/film"
 import { useEffect } from "react"
-import { CardGrid, Group, Panel, PanelHeader, Spinner } from "@vkontakte/vkui"
+import {
+  CardGrid,
+  Group,
+  Panel,
+  PanelHeader,
+  Spinner,
+  Title,
+} from "@vkontakte/vkui"
 import { observer } from "mobx-react-lite"
 import { FilmFilter } from "features/film-filter"
 import { ModalError } from "shared/ui/modal-error"
+import { Link } from "react-router"
+import { ROUTES } from "shared/routes"
+import AddFilm from "features/add-film/ui/ui"
 
 export const FilmsListPage = observer(() => {
   const {
@@ -26,7 +36,23 @@ export const FilmsListPage = observer(() => {
     <Spinner />
   ) : (
     <Panel>
-      <PanelHeader>Фильмы</PanelHeader>
+      <PanelHeader
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <Title style={{ display: "inline-block", marginRight: "30px" }}>
+          {" "}
+          Фильмы
+        </Title>
+        <Link
+          style={{ textDecoration: "none", color: "black" }}
+          to={ROUTES.FAVOURITE}
+        >
+          Избранное
+        </Link>
+      </PanelHeader>
       <FilmFilter
         genres={genres || []}
         getOptions={(options) => {
@@ -34,9 +60,12 @@ export const FilmsListPage = observer(() => {
         }}
       />
       <Group style={{ display: "flex", justifyContent: "center" }}>
-        <CardGrid padding={true} style={{ width: "80%" }}>
+        <CardGrid
+          padding={true}
+          style={{ width: "80%", alignItems: "stretch" }}
+        >
           {filmList.docs?.map(
-            ({ id, genres, alternativeName, year, rating, poster }) => (
+            ({ id, genres, alternativeName, year, rating, poster }, idx) => (
               <FilmRowCard
                 key={id}
                 id={id}
@@ -45,6 +74,7 @@ export const FilmsListPage = observer(() => {
                 year={year}
                 genres={genres}
                 poster={poster}
+                AddFilm={<AddFilm key={id} film={filmList.docs[idx]} />}
               />
             )
           )}
