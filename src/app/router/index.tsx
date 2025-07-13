@@ -1,6 +1,7 @@
 import { DescriptionFilmPage } from "pages"
 import { FilmsListPage } from "pages"
 import { FavouritePage } from "pages/favourite-page"
+import NotFoundPage from "pages/not-found-page/ui"
 import { createBrowserRouter, redirect } from "react-router"
 import { DefaultLayout } from "shared"
 import { ROUTES } from "shared/routes"
@@ -27,5 +28,9 @@ export const router = createBrowserRouter([
   {
     path: ROUTES.ROOT,
     loader: () => redirect(ROUTES.HOME),
+  },
+  {
+    path: "/*",
+    element: <NotFoundPage />,
   },
 ])
