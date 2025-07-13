@@ -1,13 +1,12 @@
 import {
-  Button,
-  CellButton,
+  CustomSelect,
+  CustomSelectOption,
   Div,
   FormItem,
   FormLayoutGroup,
   Group,
   Header,
   Input,
-  Select,
 } from "@vkontakte/vkui"
 import {
   useFilteredOptions,
@@ -18,7 +17,6 @@ import { useEffect } from "react"
 import { useLocation } from "react-router"
 import { toJS } from "mobx"
 import type { Genre } from "shared/api/films/model"
-import deleteSVG from "shared/assets/delete.png"
 
 type Props = {
   genres: Genre[]
@@ -79,17 +77,9 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
           justifyContent: "center",
           alignItems: "center",
         }}
+        onBlur={onUpdate}
+        onClick={onUpdate}
       >
-        <Button
-          onClick={onUpdate}
-          style={{
-            padding: "0.2rem",
-            height: "fit-content",
-            alignSelf: "flex-start",
-          }}
-        >
-          Применить
-        </Button>
         <Div style={{ width: "80%" }}>
           <Div
             style={{
@@ -112,63 +102,56 @@ export const FilmFilter = ({ genres, getOptions }: Props) => {
             <FormItem
               style={{ display: "flex", flexDirection: "column", gap: "5px" }}
             >
-              <Select
-                defaultValue={"any"}
+              <CustomSelect
+                placeholder={
+                  genresList.length ? "По выбранным жанрам" : "Любой"
+                }
                 options={genres?.map((g) => ({ label: g.name, value: g.slug }))}
-                onChange={(_, newVal) => {
-                  setGenresList((prev) => {
-                    const g = genres.find((g) => g.slug === newVal)
-                    if (g) {
-                      if (g.slug === "any") return []
-                      return [
-                        ...prev,
-                        {
-                          slug: g?.slug,
-                          name: g?.name,
-                        },
-                      ]
-                    }
-                    return prev
-                  })
-                }}
-              />
-              {genresList.length > 0 && (
-                <Div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    padding: "10px",
-                    boxShadow: "1px 1px 10px 1px #C0C0C0",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {genresList.map((g) => (
-                    <CellButton
-                      before={
-                        <img
-                          src={deleteSVG}
-                          style={{ width: "20px" }}
-                          onClick={() => {
-                            setGenresList((prev) =>
-                              prev.filter((genr) => genr.slug !== g.slug)
+                renderOption={({ option, ...restProps }) => (
+                  <CustomSelectOption
+                    key={option.value}
+                    {...restProps}
+                    before={
+                      <input
+                        style={{ height: "18px", width: "20px" }}
+                        onClick={(e) => e.stopPropagation()}
+                        type="checkbox"
+                        checked={
+                          (genresList.some((g) => g.slug === option.value)
+                            ? true
+                            : false) ||
+                          (option.value === "any" && genresList.length === 0)
+                        }
+                        onChange={(e) => {
+                          e.stopPropagation()
+                          setGenresList((prev) => {
+                            const g = genres.find(
+                              (g) => g.slug === option.value
                             )
-                          }}
-                        />
-                      }
-                      centered
-                      key={g.slug}
-                      style={{
-                        display: "inline-block",
-                        width: "fit-content",
-                        cursor: "pointer",
-                        marginRight: "2px",
-                      }}
-                    >
-                      {g.name}
-                    </CellButton>
-                  ))}
-                </Div>
-              )}
+                            if (g) {
+                              if (g.slug === "any") return []
+                              if (
+                                genresList.some((genr) => genr.slug === g.slug)
+                              )
+                                return prev.filter(
+                                  (genr) => genr.slug !== g.slug
+                                )
+                              return [
+                                ...prev,
+                                {
+                                  slug: g?.slug,
+                                  name: g?.name,
+                                },
+                              ]
+                            }
+                            return prev
+                          })
+                        }}
+                      />
+                    }
+                  />
+                )}
+              />
             </FormItem>
 
             <FormItem
