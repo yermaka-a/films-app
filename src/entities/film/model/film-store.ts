@@ -1,6 +1,10 @@
 import { type Film } from "shared/api/films/model"
 import { makeAutoObservable, reaction, runInAction } from "mobx"
-import { getFilmDescriptionById, getFilms, getGenres } from "shared/api/films"
+import {
+  getFilmDescriptionById,
+  getFilteredFilms,
+  getGenres,
+} from "shared/api/films"
 import type {
   FilmDescription,
   Films,
@@ -9,7 +13,7 @@ import type {
 } from "shared/api/films/model"
 
 class FilmStore {
-  filmList: Films = { docs: [], total: 0, limit: 0, page: 0, pages: 0 }
+  filmList: Films = { docs: [], total: 0, limit: 50, page: 0, pages: 0 }
   filmDescription?: FilmDescription
   isLoading = false
   filmListError = ""
@@ -37,11 +41,13 @@ class FilmStore {
   getFilms = async (queryParams: QueryParams) => {
     try {
       this.isLoading = true
-      const data = await getFilms(queryParams)
+      const data = await getFilteredFilms(queryParams)
       runInAction(() => {
+        this.filmList.docs.concat(data.data.docs)
+        this.filmList.page = data.data.page
+        this.filmList.pages = data.data.pages
+        this.filmList.total = data.data.total
         this.isLoading = false
-
-        this.filmList = data.data
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -59,9 +65,9 @@ class FilmStore {
       const data = await getGenres()
       runInAction(() => {
         this.isLoading = false
-        data.unshift({ name: "Любой", slug: "any" })
+        data.data.unshift({ name: "Любой", slug: "any" })
 
-        this.genres = data
+        this.genres = data.data
       })
     } catch (error) {
       if (error instanceof Error) {
