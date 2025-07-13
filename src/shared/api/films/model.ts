@@ -71,7 +71,7 @@ export type Films = {
 export type QueryParams = {
   limit?: number
   page?: number
-  types?: { type: string }[]
+  type?: string[]
   year?: string
   "rating.imdb"?: string
   id?: string
