@@ -1,0 +1,180 @@
+{
+  "id": 8371202,
+  "name": "Маша по лаве шагала",
+  "alternativeName": null,
+  "enName": null,
+  "type": "movie",
+  "typeNumber": 1,
+  "year": 2023,
+  "description": "Маше 19 лет. Она еще не понимает, что будет делать в будущем, зато уже сейчас она встречается с двумя парнями одновременно. Днем она проводит время с романтиком Васей, а по вечерам видится с брутальным Эдуардом.\nДевушке удачно удается скрывать парней друг от друга, но когда ее интригу раскрывает Вася, Маше нужно будет принять окончательное решение с кем же из двух любовников она останется в итоге.",
+  "shortDescription": null,
+  "slogan": "Я сказала тебе, Вася!",
+  "status": null,
+  "rating": {
+    "kp": 0,
+    "imdb": 5,
+    "filmCritics": 0,
+    "russianFilmCritics": 0,
+    "await": 0
+  },
+  "votes": {
+    "kp": 12,
+    "imdb": 0,
+    "filmCritics": 0,
+    "russianFilmCritics": 0,
+    "await": 0
+  },
+  "movieLength": 7,
+  "totalSeriesLength": null,
+  "seriesLength": null,
+  "ratingMpaa": null,
+  "ageRating": 18,
+  "poster": {
+    "url": "https://image.openmoviedb.com/kinopoisk-images/10703959/35039383-279a-402f-9eb7-0b3df6e65072/600x900",
+    "previewUrl": "https://image.openmoviedb.com/kinopoisk-images/10703959/35039383-279a-402f-9eb7-0b3df6e65072/300x450"
+  },
+  "genres": [
+    {
+      "name": "короткометражка"
+    },
+    {
+      "name": "комедия"
+    }
+  ],
+  "countries": [
+    {
+      "name": "Россия"
+    }
+  ],
+  "persons": [
+    {
+      "id": 10344126,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344126.jpg",
+      "name": "Дарья Александрова",
+      "enName": null,
+      "description": null,
+      "profession": "актеры",
+      "enProfession": "actor"
+    },
+    {
+      "id": 10287071,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10287071.jpg",
+      "name": "Ярослав Вепринцев",
+      "enName": null,
+      "description": null,
+      "profession": "актеры",
+      "enProfession": "actor"
+    },
+    {
+      "id": 10211434,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10211434.jpg",
+      "name": "Никита Ростовцев",
+      "enName": null,
+      "description": null,
+      "profession": "актеры",
+      "enProfession": "actor"
+    },
+    {
+      "id": 10312726,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10312726.jpg",
+      "name": "Светлана Дементьева",
+      "enName": null,
+      "description": null,
+      "profession": "художники",
+      "enProfession": "designer"
+    },
+    {
+      "id": 10344130,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344130.jpg",
+      "name": "Мария Курбатова",
+      "enName": null,
+      "description": null,
+      "profession": "художники",
+      "enProfession": "designer"
+    },
+    {
+      "id": 10227611,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10227611.jpg",
+      "name": "Дарья Фарафонова",
+      "enName": null,
+      "description": null,
+      "profession": "художники",
+      "enProfession": "designer"
+    },
+    {
+      "id": 10344128,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344128.jpg",
+      "name": "Артём Бухров",
+      "enName": null,
+      "description": null,
+      "profession": "режиссеры",
+      "enProfession": "director"
+    },
+    {
+      "id": 10344131,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344131.jpg",
+      "name": "Светлана Надюкова",
+      "enName": null,
+      "description": null,
+      "profession": "монтажеры",
+      "enProfession": "editor"
+    },
+    {
+      "id": 10344129,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344129.jpg",
+      "name": "Андрей Окунев",
+      "enName": null,
+      "description": null,
+      "profession": "операторы",
+      "enProfession": "operator"
+    },
+    {
+      "id": 10287071,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10287071.jpg",
+      "name": "Ярослав Вепринцев",
+      "enName": null,
+      "description": null,
+      "profession": "продюсеры",
+      "enProfession": "producer"
+    },
+    {
+      "id": 10344126,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344126.jpg",
+      "name": "Дарья Александрова",
+      "enName": null,
+      "description": null,
+      "profession": "продюсеры",
+      "enProfession": "producer"
+    },
+    {
+      "id": 10344127,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344127.jpg",
+      "name": "Маша Конторович",
+      "enName": null,
+      "description": null,
+      "profession": "сценаристы",
+      "enProfession": "writer"
+    },
+    {
+      "id": 10344128,
+      "photo": "https://image.openmoviedb.com/kinopoisk-st-images//actor_iphone/iphone360_10344128.jpg",
+      "name": "Артём Бухров",
+      "enName": null,
+      "description": null,
+      "profession": "сценаристы",
+      "enProfession": "writer"
+    }
+  ],
+  "budget": {
+    "currency": "₽",
+    "value": 100000
+  },
+  "top10": null,
+  "top250": null,
+  "isSeries": false,
+  "ticketsOnSale": false,
+  "lists": [],
+  "watchabilityParsed": false,
+  "createdAt": "2025-07-06T17:56:12.376Z",
+  "updatedAt": "2025-07-06T17:56:12.376Z"
+}

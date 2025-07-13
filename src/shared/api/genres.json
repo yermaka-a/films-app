@@ -1,0 +1,14 @@
+[
+  {
+    "name": "фильмы",
+    "slug": "movie"
+  },
+  {
+    "name": "аниме",
+    "slug": "anime"
+  },
+  {
+    "name": "боевик",
+    "slug": "boevik"
+  }
+]

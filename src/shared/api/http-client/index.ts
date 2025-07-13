@@ -1,12 +1,9 @@
 import axios from "axios"
-import { config } from "shared/config"
 
 export const httpClient = axios.create({
-  baseURL: config.BASE_URL,
+  baseURL: "",
   headers: {
-    "X-API-KEY": config.X_API_KEY,
+    // "X-API-KEY": config.X_API_KEY,
     "Content-Type": "application/json",
   },
 })
-
-
