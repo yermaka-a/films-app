@@ -42,10 +42,10 @@ export const useFilteredOptions = () => {
         : 10
 
     const newGenres = options.genres
+    const slugs = newGenres.map((g) => g.slug)
+    const oSlugs = genresList?.map((g) => g.slug)
 
-    const isSameGenres =
-      genresList.length === newGenres.length &&
-      genresList.every((g) => newGenres.includes(g))
+    const isSameGenres = slugs.sort().join("") === oSlugs?.sort().join("")
 
     if (
       isSameGenres &&
@@ -117,8 +117,13 @@ export const useSearchFilteredParams = () => {
         years: { yearFrom: yFr, yearTo: yTo },
       } = opts
 
+      const slugs = genres.map((g) => g.slug)
+      const oSlugs = g?.map((g) => g.slug)
+
+      const isSameGenres = slugs.sort().join("") === oSlugs?.sort().join("")
+
       if (
-        !(g.length === genres.length) ||
+        !isSameGenres ||
         !(ratingFrom === rFr && ratingTo === rTo) ||
         !(yearFrom === yFr && yearTo === yTo)
       ) {

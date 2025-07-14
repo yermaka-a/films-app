@@ -31,7 +31,7 @@ export const CardFilteredList = observer(() => {
         "rating.imdb": `${ratings.ratingFrom}-${ratings.ratingTo}`,
         limit: 50,
         page: 1,
-        type: genres.map((g) => g.slug).filter((s) => s !== "any"),
+        type: genres.map((g) => g.name),
         year: `${years.yearFrom}-${years.yearTo}`,
       })
       setPage(1)
@@ -48,10 +48,11 @@ export const CardFilteredList = observer(() => {
       updateFilms({
         "rating.imdb": `${ratings.ratingFrom}-${ratings.ratingTo}`,
         limit: 50,
-        page: page + 1,
-        type: genres.map((g) => g.slug).filter((s) => s !== "any"),
+        page: page,
+        type: genres.map((g) => g.name),
         year: `${years.yearFrom}-${years.yearTo}`,
       })
+
       setPage((prev) => prev + 1)
     }
   }, isVisible)
